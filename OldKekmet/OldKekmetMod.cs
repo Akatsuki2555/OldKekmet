@@ -12,7 +12,7 @@ namespace OldKekmet
 
         public override string Name => "Old Kekmet";
 
-        public override string Version => "v1.0";
+        public override string Version => "1.1";
 
         public override string Author => "mldkyt";
 
@@ -23,17 +23,39 @@ namespace OldKekmet
             SetupFunction(Setup.OnLoad, Mod_Load);
         }
 
-        SettingsCheckBox engineSounds, startingSounds, disableDashboard, disableForkliftArm, makeForkliftWhite, oldStartingSystem, disableRadio,
-            enableSoundImprovementScript, disableForkliftArm1, disableForkliftArm2, disableForkliftArm3, antiStallDeriveFromKeys;
-        SettingsSlider engineThrottleVolume, engineNoThrottleVolume, engineThrottlePitchFactor, engineNoThrottlePitchFactor, antiStallRPM,
-            soundImprovementMuteDeaccelThreshold;
-        SettingsColorPicker makeForkliftWhiteColor;
+        private SettingsCheckBox engineSounds;
+        private SettingsCheckBox startingSounds;
+        private SettingsCheckBox disableDashboard;
+        private SettingsCheckBox disableForkliftArm; 
+        private SettingsCheckBox makeForkliftWhite; 
+        private SettingsCheckBox oldStartingSystem; 
+        private SettingsCheckBox disableRadio;
+
+#if ADVANCED_FEATURES
+        private SettingsCheckBox enableSoundImprovementScript;
+        private SettingsCheckBox disableForkliftArm1;
+        private SettingsCheckBox disableForkliftArm2;
+        private SettingsCheckBox disableForkliftArm3;
+        
+        private SettingsSlider engineThrottleVolume;
+        private SettingsSlider engineNoThrottleVolume;
+        private SettingsSlider engineThrottlePitchFactor;
+        private SettingsSlider engineNoThrottlePitchFactor;
+        private SettingsSlider antiStallRPM;
+        private SettingsSlider soundImprovementMuteDeaccelThreshold;
+
+        private SettingsColorPicker makeForkliftBlackColor;
+#endif
+
+
 
         public override void ModSettings()
         {
             base.ModSettings();
 
+#if ADVANCED_FEATURES
             Settings.AddHeader(this, "Main");
+#endif
 
             engineSounds = Settings.AddCheckBox(this, "engineSounds", "Old Engine Sounds", true);
             startingSounds = Settings.AddCheckBox(this, "engineStarting", "Old Engine Starting Sounds", true);
@@ -51,6 +73,7 @@ namespace OldKekmet
                 });
             });
 
+#if ADVANCED_FEATURES
             Settings.AddHeader(this, "Advanced");
 
             Settings.AddText(this, "The values load after reload.");
@@ -68,10 +91,10 @@ namespace OldKekmet
             disableForkliftArm2 = Settings.AddCheckBox(this, "disableForkliftArm2", "disableForkliftArm:FrontLoader", true);
             disableForkliftArm3 = Settings.AddCheckBox(this, "disableForkliftArm3", "disableForkliftArm:FrontLoader/ArmPivot/Arm/LoaderPivot/Loader", true);
 
-            makeForkliftWhiteColor = Settings.AddColorPickerRGB(this, "makeForkliftWhiteColor", "makeForkliftWhiteColor", Color.white);
+            makeForkliftBlackColor = Settings.AddColorPickerRGB(this, "makeForkliftWhiteColor", "makeForkliftWhiteColor", Color.black);
 
-            antiStallDeriveFromKeys = Settings.AddCheckBox(this, "antiStallDeriveFromKeys", "antiStallDeriveFromKeys", true);
             antiStallRPM = Settings.AddSlider(this, "antiStallRPM", "antiStallRPM", 300f, 2500f, 500f);
+#endif
         }
 
         void Mod_Load()
@@ -86,21 +109,32 @@ namespace OldKekmet
 
                 traktorSounds.engineThrottle = valmetIdle;
                 traktorSounds.engineNoThrottle = valmetIdle;
+#if ADVANCED_FEATURES
                 traktorSounds.engineThrottleVolume = engineThrottleVolume.GetValue();
                 traktorSounds.engineNoThrottleVolume = engineNoThrottleVolume.GetValue();
                 traktorSounds.engineThrottlePitchFactor = engineThrottlePitchFactor.GetValue();
                 traktorSounds.engineNoThrottlePitchFactor = engineNoThrottlePitchFactor.GetValue();
+#else
+                traktorSounds.engineThrottleVolume = 3;
+                traktorSounds.engineNoThrottleVolume = 2.5f;
+                traktorSounds.engineThrottlePitchFactor = 1;
+                traktorSounds.engineNoThrottlePitchFactor = 1;
+#endif
 
                 traktor.transform.GetChild(21).GetComponent<AudioSource>().clip = valmetIdle;
                 traktor.transform.GetChild(22).GetComponent<AudioSource>().clip = valmetIdle;
                 traktor.transform.GetChild(21).GetComponent<AudioSource>().Play();
                 traktor.transform.GetChild(22).GetComponent<AudioSource>().Play();
 
+#if ADVANCED_FEATURES
                 if (enableSoundImprovementScript.GetValue())
                 {
                     var si = traktor.AddComponent<SoundImprovement>();
                     si.threshold = soundImprovementMuteDeaccelThreshold.GetValue();
                 }
+#else
+                var si = traktor.AddComponent<SoundImprovement>();
+#endif
             }
 
             if (startingSounds.GetValue())
@@ -132,8 +166,10 @@ namespace OldKekmet
 
             if (disableForkliftArm.GetValue())
             {
+#if ADVANCED_FEATURES
                 if (disableForkliftArm1.GetValue())
                 {
+#endif
                     var forklift1 = GameObject.Find("KEKMET(350-400psi)/Frontloader/ArmPivot/Arm").transform;
 
                     forklift1.GetChild(0).gameObject.SetActive(false);
@@ -146,31 +182,41 @@ namespace OldKekmet
 
                     for (var i = 17; i <= 20; i++)
                         forklift2.GetChild(i).gameObject.SetActive(false);
+#if ADVANCED_FEATURES
                 }
 
                 if (disableForkliftArm2.GetValue())
                 {
-                    var forklift3 = GameObject.Find("KEKMET(350-400psi)/Frontloader").transform;
+#endif
+                var forklift3 = GameObject.Find("KEKMET(350-400psi)/Frontloader").transform;
 
                     forklift3.GetChild(0).gameObject.SetActive(false);
                     forklift3.GetChild(1).gameObject.SetActive(false);
                     forklift3.GetChild(2).gameObject.SetActive(false);
+#if ADVANCED_FEATURES
                 }
 
                 if (disableForkliftArm3.GetValue())
                 {
-                    var forklift4 = GameObject.Find("KEKMET(350-400psi)/Frontloader/ArmPivot/Arm/LoaderPivot/Loader").transform;
+#endif
+                var forklift4 = GameObject.Find("KEKMET(350-400psi)/Frontloader/ArmPivot/Arm/LoaderPivot/Loader").transform;
 
                     forklift4.GetChild(5).gameObject.SetActive(false);
                     forklift4.GetChild(6).gameObject.SetActive(false);
+#if ADVANCED_FEATURES
                 }
+#endif
             }
 
             if (makeForkliftWhite.GetValue())
             {
                 GameObject.Find("KEKMET(350-400psi)/Frontloader/ArmPivot/Arm/LoaderPivot/Loader/mesh").GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"))
                 {
-                    color = makeForkliftWhiteColor.GetValue()
+#if ADVANCED_FEATURES
+                    color = makeForkliftBlackColor.GetValue()
+#else
+                    color = new Color(43, 43, 43)
+#endif
                 };
             }
 
@@ -182,7 +228,9 @@ namespace OldKekmet
             if (oldStartingSystem.GetValue())
             {
                 var antiStall = traktor.AddComponent<AntiStall>();
+#if ADVANCED_FEATURES
                 antiStall.minRPM = antiStallRPM.GetValue();
+#endif
             }
 
             resources.Unload(false);

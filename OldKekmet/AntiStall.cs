@@ -6,29 +6,41 @@ namespace OldKekmet
     public class AntiStall : MonoBehaviour
     {
 
-        Drivetrain _d;
-        PlayMakerFSM _i;
-        FsmBool _b;
+        Drivetrain drivertrain;
+        PlayMakerFSM ignition;
+        FsmBool accState;
 
+#if ADVANCED_FEATURES
         public float minRPM;
+#endif
 
         void Start()
         {
-            _d = GetComponent<Drivetrain>();
-            _i = transform.GetChild(4).GetChild(0).GetComponents<PlayMakerFSM>()[0];
-            _b = _i.FsmVariables.GetFsmBool("ACC");
+            drivertrain = GetComponent<Drivetrain>();
+            ignition = transform.GetChild(4).GetChild(0).GetComponents<PlayMakerFSM>()[0];
+            accState = ignition.FsmVariables.GetFsmBool("ACC");
         }
 
         void Update()
         {
-            if (_b.Value)
-                _d.minRPM = minRPM;
+#if ADVANCED_FEATURES
+            if (accState.Value)
+                drivertrain.minRPM = minRPM;
+#else
+            if (accState.Value)      
+                drivertrain.minRPM = 500;
+#endif
         }
 
         void LateUpdate()
         {
-            if (_b.Value)
-                _d.minRPM = minRPM;
+#if ADVANCED_FEATURES
+            if (accState.Value)
+                drivertrain.minRPM = minRPM;
+#else
+            if (accState.Value)
+                drivertrain.minRPM = 500;
+#endif
         }
 
     }

@@ -10,7 +10,9 @@ namespace OldKekmet
     {
         AudioSource throttle, noThrottle;
 
+#if ADVANCED_FEATURES
         public float threshold;
+#endif
 
 
         void Start()
@@ -21,7 +23,10 @@ namespace OldKekmet
 
         void Update()
         {
+#if ADVANCED_FEATURES
             if (throttle.volume > threshold) noThrottle.Stop();
+#endif
+            if (throttle.volume > 0.5f) noThrottle.Stop();
             else if (!noThrottle.isPlaying) noThrottle.Play();
         }
     }

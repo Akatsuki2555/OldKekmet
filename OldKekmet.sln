@@ -7,14 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OldKekmet", "OldKekmet\OldK
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Release-Advanced|Any CPU = Release-Advanced|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C6E44087-A7A2-4F1B-BD20-150B0474D1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6E44087-A7A2-4F1B-BD20-150B0474D1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6E44087-A7A2-4F1B-BD20-150B0474D1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6E44087-A7A2-4F1B-BD20-150B0474D1E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E44087-A7A2-4F1B-BD20-150B0474D1E0}.Release-Advanced|Any CPU.ActiveCfg = Release-Advanced|Any CPU
+		{C6E44087-A7A2-4F1B-BD20-150B0474D1E0}.Release-Advanced|Any CPU.Build.0 = Release-Advanced|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
