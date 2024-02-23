@@ -53,7 +53,7 @@ namespace OldKekmet
         {
             base.ModSettings();
 
-#if ADVANCED_FEATURES
+#if ADVANCED_FEATURES   
             Settings.AddHeader(this, "Main");
 #endif
 
