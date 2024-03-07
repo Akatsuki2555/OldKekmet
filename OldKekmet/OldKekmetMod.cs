@@ -14,7 +14,7 @@ namespace OldKekmet
 
         public override string Version => "1.1";
 
-        public override string Author => "mldkyt";
+        public override string Author => "アカツキ";
 
         public override void ModSetup()
         {
